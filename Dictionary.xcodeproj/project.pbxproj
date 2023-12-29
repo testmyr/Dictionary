@@ -58,10 +58,8 @@
 			isa = PBXGroup;
 			children = (
 				5AED74A52B3DF3BA00F7AE4B /* DictionaryApp.swift */,
-				5AED74A72B3DF3BA00F7AE4B /* ContentView.swift */,
+				5AED74B92B3E356300F7AE4B /* Views */,
 				5AED74B32B3E190500F7AE4B /* Store.swift */,
-				5AED74B52B3E210300F7AE4B /* RelatedWordsView.swift */,
-				5AED74B72B3E210E00F7AE4B /* RelatedPhrasesView.swift */,
 				5AED74A92B3DF3BC00F7AE4B /* Assets.xcassets */,
 				5AED74AB2B3DF3BC00F7AE4B /* Preview Content */,
 			);
@@ -74,6 +72,16 @@
 				5AED74AC2B3DF3BC00F7AE4B /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		5AED74B92B3E356300F7AE4B /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5AED74A72B3DF3BA00F7AE4B /* ContentView.swift */,
+				5AED74B52B3E210300F7AE4B /* RelatedWordsView.swift */,
+				5AED74B72B3E210E00F7AE4B /* RelatedPhrasesView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

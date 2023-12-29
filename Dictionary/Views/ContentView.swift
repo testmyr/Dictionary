@@ -23,17 +23,27 @@ struct ContentView: View {
             ZStack(alignment: .topLeading) {
                 let heightBottom: CGFloat = 150
                 VStack {
-                    ScrollView(showsIndicators: false) {
-                        VStack {
-                            ForEach(store.definitions, id: \.self) { definition in
-                                Text(definition)
-                                    .padding()
-                                    .background(.red)
-                                    .cornerRadius(20)
+                    ZStack(alignment: .top) {
+                        ScrollView(showsIndicators: false) {
+                            VStack {
+                                ForEach(store.definitions, id: \.self) { definition in
+                                    Text(definition)
+                                        .padding()
+                                        .background(.red)
+                                        .cornerRadius(20)
+                                }
                             }
                         }
+                        .padding([.top], geometry.safeAreaInsets.top)
+                        
+                        let widthSideView = geometry.size.width * 0.62
+                        RelatedWordsView()
+                            .offset(x: viewState == .left ? -(geometry.size.width - widthSideView) * 0.5 : -widthSideView - (geometry.size.width - widthSideView) * 0.5 )
+                            .frame(width: widthSideView)
+                        RelatedPhrasesView()
+                            .offset(x: viewState == .right ? (geometry.size.width - widthSideView) * 0.5 : widthSideView + (geometry.size.width - widthSideView) * 0.5)
+                            .frame(width: widthSideView)
                     }
-                    .padding([.top], geometry.safeAreaInsets.top)
                     VStack {
                         HStack {
                             Button("Related words") {
@@ -97,14 +107,6 @@ struct ContentView: View {
                 }
                 .ignoresSafeArea(edges: [.top])
                 .padding([.leading, .trailing], 5)
-                let widthSideView = geometry.size.width * 0.62
-                let heightSideView = geometry.size.height - heightBottom
-                RelatedWordsView()
-                    .offset(x: viewState == .left ? 0 : -widthSideView)
-                    .frame(width: widthSideView, height: heightSideView)
-                RelatedPhrasesView()
-                    .offset(x: viewState == .right ? geometry.size.width - widthSideView : geometry.size.width)
-                    .frame(width: widthSideView, height: heightSideView)
             }
         }
     }
