@@ -12,7 +12,10 @@ struct RelatedPhrasesView: View {
         GeometryReader { geometry in
             VStack() {
                 Spacer()
-                Text("Hello, RelatedPhrases!")
+                HStack {
+                    Spacer()
+                    Text("Hello, RelatedPhrases!")
+                }
                 Spacer()
             }
         }
