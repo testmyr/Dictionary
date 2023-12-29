@@ -13,10 +13,8 @@ enum ViewState {
 
 struct MainView: View {
     @StateObject private var store = Store()
-    var wordInitial: String
-    @State var word: String = ""
+    @Binding var word: String
     @State var viewState: ViewState = .general
-    
     private let dragTrigger: CGFloat = 50
     
     var body: some View {
@@ -100,6 +98,9 @@ struct MainView: View {
                         }
                         .padding([.top, .bottom])
                     }
+//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                    .contentShape(Rectangle())
+//                    .simultaneousGesture(DragGesture())
                     .frame(height: heightBottom)
                     .background(Color.white)
                 }
@@ -112,9 +113,6 @@ struct MainView: View {
                 .padding([.leading, .trailing], 5)
             }
         }
-        .onAppear() {
-            word = wordInitial
-        }
         .onDisappear() {
             viewState = .general
         }
@@ -123,6 +121,6 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(wordInitial: "do1")
+        MainView(word: .constant("do1"))
     }
 }

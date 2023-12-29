@@ -9,37 +9,29 @@ import SwiftUI
 
 struct ContentView: View {
     
-    private var history = ["just", "do", "it", "yourself"]
-    @State private var currentWordIndex = 0
+    @State var history = ["just", "do", "it", "yourself"].map({Word(word: $0)})
+    @State private var currentTab: Int = 0
     
     var body: some View {
-        InfinitePageView(
-            selection: $currentWordIndex,
-                    before: { correctedIndex(for: $0 - 1) },
-                    after: { correctedIndex(for: $0 + 1) },
-                    view: { index in
-                        //store.definitions[index]
-                        MainView(wordInitial: history[index])
-                    }
-                )
-        .ignoresSafeArea(edges: [.top])
-        
-//        TabView {
-//            MainView(wordInitial: history[currentWordIndex])
-//            Text("dsfdf")
-//            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//            .contentShape(Rectangle())
-//            .simultaneousGesture(DragGesture())
-//            Text("dsfds")
-//                .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                .contentShape(Rectangle())
-//                .gesture(DragGesture())
-//        }
-//        .ignoresSafeArea(edges: [.top])
-//        .tabViewStyle(PageTabViewStyle())
+        TabView(selection: $currentTab) {
+            ForEach(history.indices, id: \.self) { index in
+              MainView(word: $history[index].word)
+                    .tag(index)
+          }
+        }
+        .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+        .overlay {
+            Button("Add") {
+                history.removeLast(history.count - 1 - currentTab)
+                history.append(Word(word: "sample"))
+            }
+        }
+        .onChange(of: history) { newValue in
+            currentTab = history.count - 1
+        }
     }
     
-    func correctedIndex(for index: Int) -> Int {
+    private func correctedIndex(for index: Int) -> Int {
         let count = history.count
         return (count + index) % count
     }
