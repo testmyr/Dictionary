@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		5ABE95522B3EBB0A00E9DC56 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABE95512B3EBB0A00E9DC56 /* MainView.swift */; };
 		5ABE95562B3F0D6000E9DC56 /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABE95552B3F0D6000E9DC56 /* Word.swift */; };
+		5ABE955A2B3F601B00E9DC56 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 5ABE95592B3F601B00E9DC56 /* SQLite */; };
+		5ACC72BE2B40E333005E3E6E /* Dict_trial.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ACC72BD2B40E333005E3E6E /* Dict_trial.sqlite3 */; };
+		5ACC72C22B40E569005E3E6E /* Phrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACC72C12B40E569005E3E6E /* Phrase.swift */; };
+		5ACC72C42B40E714005E3E6E /* Swift.Blob+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACC72C32B40E714005E3E6E /* Swift.Blob+Extension.swift */; };
 		5AED74A62B3DF3BA00F7AE4B /* DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AED74A52B3DF3BA00F7AE4B /* DictionaryApp.swift */; };
 		5AED74A82B3DF3BA00F7AE4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AED74A72B3DF3BA00F7AE4B /* ContentView.swift */; };
 		5AED74AA2B3DF3BC00F7AE4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AED74A92B3DF3BC00F7AE4B /* Assets.xcassets */; };
@@ -21,6 +25,9 @@
 /* Begin PBXFileReference section */
 		5ABE95512B3EBB0A00E9DC56 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		5ABE95552B3F0D6000E9DC56 /* Word.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
+		5ACC72BD2B40E333005E3E6E /* Dict_trial.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dict_trial.sqlite3; sourceTree = "<group>"; };
+		5ACC72C12B40E569005E3E6E /* Phrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrase.swift; sourceTree = "<group>"; };
+		5ACC72C32B40E714005E3E6E /* Swift.Blob+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Swift.Blob+Extension.swift"; sourceTree = "<group>"; };
 		5AED74A22B3DF3BA00F7AE4B /* Dictionary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dictionary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AED74A52B3DF3BA00F7AE4B /* DictionaryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryApp.swift; sourceTree = "<group>"; };
 		5AED74A72B3DF3BA00F7AE4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -36,6 +43,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ABE955A2B3F601B00E9DC56 /* SQLite in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -47,6 +55,8 @@
 			children = (
 				5AED74B32B3E190500F7AE4B /* Store.swift */,
 				5ABE95552B3F0D6000E9DC56 /* Word.swift */,
+				5ACC72C12B40E569005E3E6E /* Phrase.swift */,
+				5ACC72C32B40E714005E3E6E /* Swift.Blob+Extension.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -70,6 +80,7 @@
 		5AED74A42B3DF3BA00F7AE4B /* Dictionary */ = {
 			isa = PBXGroup;
 			children = (
+				5ACC72BD2B40E333005E3E6E /* Dict_trial.sqlite3 */,
 				5AED74A52B3DF3BA00F7AE4B /* DictionaryApp.swift */,
 				5AED74B92B3E356300F7AE4B /* Views */,
 				5ABE95572B3F15A900E9DC56 /* Model */,
@@ -114,6 +125,9 @@
 			dependencies = (
 			);
 			name = Dictionary;
+			packageProductDependencies = (
+				5ABE95592B3F601B00E9DC56 /* SQLite */,
+			);
 			productName = Dictionary;
 			productReference = 5AED74A22B3DF3BA00F7AE4B /* Dictionary.app */;
 			productType = "com.apple.product-type.application";
@@ -142,6 +156,9 @@
 				Base,
 			);
 			mainGroup = 5AED74992B3DF3BA00F7AE4B;
+			packageReferences = (
+				5ABE95582B3F601B00E9DC56 /* XCRemoteSwiftPackageReference "SQLite.swift" */,
+			);
 			productRefGroup = 5AED74A32B3DF3BA00F7AE4B /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -156,6 +173,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5ACC72BE2B40E333005E3E6E /* Dict_trial.sqlite3 in Resources */,
 				5AED74AD2B3DF3BC00F7AE4B /* Preview Assets.xcassets in Resources */,
 				5AED74AA2B3DF3BC00F7AE4B /* Assets.xcassets in Resources */,
 			);
@@ -169,7 +187,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AED74B42B3E190500F7AE4B /* Store.swift in Sources */,
+				5ACC72C42B40E714005E3E6E /* Swift.Blob+Extension.swift in Sources */,
 				5ABE95562B3F0D6000E9DC56 /* Word.swift in Sources */,
+				5ACC72C22B40E569005E3E6E /* Phrase.swift in Sources */,
 				5ABE95522B3EBB0A00E9DC56 /* MainView.swift in Sources */,
 				5AED74B82B3E210E00F7AE4B /* RelatedPhrasesView.swift in Sources */,
 				5AED74B62B3E210300F7AE4B /* RelatedWordsView.swift in Sources */,
@@ -373,6 +393,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		5ABE95582B3F601B00E9DC56 /* XCRemoteSwiftPackageReference "SQLite.swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stephencelis/SQLite.swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.14.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		5ABE95592B3F601B00E9DC56 /* SQLite */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 5ABE95582B3F601B00E9DC56 /* XCRemoteSwiftPackageReference "SQLite.swift" */;
+			productName = SQLite;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 5AED749A2B3DF3BA00F7AE4B /* Project object */;
 }

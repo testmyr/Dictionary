@@ -12,10 +12,11 @@ enum ViewState {
 }
 
 struct MainView: View {
-    @StateObject private var store = Store()
     @Binding var word: String
     @State var viewState: ViewState = .general
     private let dragTrigger: CGFloat = 50
+    
+    @EnvironmentObject private var store: Store
     
     var body: some View {
         GeometryReader { geometry in
@@ -25,7 +26,7 @@ struct MainView: View {
                     ZStack(alignment: .top) {
                         ScrollView(showsIndicators: false) {
                             VStack {
-                                ForEach(store.definitions, id: \.self) { definition in
+                                ForEach(store.definitions_, id: \.self) { definition in
                                     Text(definition)
                                         .padding()
                                         .background(.red)

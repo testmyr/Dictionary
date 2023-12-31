@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ContentView: View {
-    
     @State var history = ["just", "do", "it", "yourself"].map({Word(word: $0)})
     @State private var currentTab: Int = 0
     
@@ -19,6 +18,7 @@ struct ContentView: View {
                     .tag(index)
           }
         }
+        .ignoresSafeArea(edges: [.top])
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .overlay {
             Button("Add") {
