@@ -13,10 +13,11 @@ enum ViewState {
 
 struct MainView: View {
     @Binding var word: String
+    var definitions: [[String]]
     @State var viewState: ViewState = .general
-    private let dragTrigger: CGFloat = 50
+    @State var textSizes: [CGSize]
     
-    @EnvironmentObject private var store: Store
+    private let dragTrigger: CGFloat = 50
     
     var body: some View {
         GeometryReader { geometry in
@@ -26,11 +27,12 @@ struct MainView: View {
                     ZStack(alignment: .top) {
                         ScrollView(showsIndicators: false) {
                             VStack {
-                                ForEach(store.definitions_, id: \.self) { definition in
-                                    Text(definition)
+                                ForEach(0..<definitions.indices.count, id: \.self) { index in
+                                    TextWordedView(words: definitions[index], childrenSize: $textSizes[index])
                                         .padding()
                                         .background(.red)
                                         .cornerRadius(20)
+                                        .frame(height: textSizes[index].height + 30)
                                 }
                             }
                         }
@@ -99,9 +101,9 @@ struct MainView: View {
                         }
                         .padding([.top, .bottom])
                     }
-//                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                    .contentShape(Rectangle())
-//                    .simultaneousGesture(DragGesture())
+                    //                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    //                    .contentShape(Rectangle())
+                    //                    .simultaneousGesture(DragGesture())
                     .frame(height: heightBottom)
                     .background(Color.white)
                 }
@@ -122,6 +124,7 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        MainView(word: .constant("do1")).environmentObject(Store())
+        let temp = Store().definitions_
+        MainView(word: .constant("do1"), definitions: Store().definitions_, textSizes: Array<CGSize>(repeating: .zero, count: temp.count)).environmentObject(Store())
     }
 }

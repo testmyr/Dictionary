@@ -9,7 +9,7 @@ import Foundation
 import SQLite
 
 class Store: ObservableObject {
-    @Published var definitions_: [String] = []
+    @Published var definitions_: [[String]] = []
     
     private let db: Connection?
     private let users = Table("dictionary")
@@ -34,7 +34,7 @@ class Store: ObservableObject {
         print(String(decoding: temp!.definitions.bytes, as: UTF8.self))
         print(String(decoding: temp2!.definitions.bytes, as: UTF8.self))
 #if DEBUG
-        simulateData()
+        simulatedDefenitions()
 #endif
     }
     
@@ -64,12 +64,17 @@ class Store: ObservableObject {
         }
     }
     
-    func simulateData() {
-        for _ in 0...10 {
-            let r = Int.random(in: 50...400)
-            let definition = String(Array<Character>(repeating: "A", count: r))
+    func simulatedDefenitions() -> [[String]] {
+        var definitions_: [[String]] = []
+        for _ in 2...10 {
+            var definition: [String] = []
+            for _ in 0...Int.random(in: 10...50) {
+                let wordLength = Int.random(in: 1...10)
+                definition.append(String(Array<Character>(repeating: "A", count: wordLength)))
+            }
             definitions_.append(definition)
         }
+        return definitions_
     }
     
     

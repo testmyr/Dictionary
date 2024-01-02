@@ -11,12 +11,17 @@ struct ContentView: View {
     @State var history = ["just", "do", "it", "yourself"].map({Word(word: $0)})
     @State private var currentTab: Int = 0
     
+    @EnvironmentObject private var store: Store
     var body: some View {
         TabView(selection: $currentTab) {
             ForEach(history.indices, id: \.self) { index in
-              MainView(word: $history[index].word)
-                    .tag(index)
-          }
+                let wordDefinitions = store.simulatedDefenitions()
+                MainView(word: $history[index].word,
+                         definitions: wordDefinitions,
+                         // a bit crutch but it seems no another way
+                         textSizes: Array<CGSize>(repeating: .zero, count: wordDefinitions.count))
+                .tag(index)
+            }
         }
         .ignoresSafeArea(edges: [.top])
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
