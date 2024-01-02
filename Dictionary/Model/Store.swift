@@ -30,21 +30,18 @@ class Store: ObservableObject {
         if let user = try? db?.pluck(users) {
         }
         let temp = getWord(word: "just")
+        let r = temp!.definitions
+        print(r)
         let temp2 = getPhrase(for: "just")
-        print(String(decoding: temp!.definitions.bytes, as: UTF8.self))
-        print(String(decoding: temp2!.definitions.bytes, as: UTF8.self))
-#if DEBUG
-        simulatedDefenitions()
-#endif
     }
     
-    func getWord(word: String) -> Word1? {
+    func getWord(word: String) -> Word? {
         let query = users.select(id, wordExpression, partofspeech, definitions, relatedwords, forms)
             .filter(self.wordExpression == word)
             .limit(1)
         if let element = try? db?.prepareRowIterator(query).next() {
             let decoder = element.decoder()
-            return try? Word1(from: decoder)
+            return try? Word(from: decoder)
         } else {
             return nil
         }

@@ -8,27 +8,29 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var history = ["just", "do", "it", "yourself"].map({Word(word: $0)})
+    @State var history = ["just", "do", "it", "yourself"].map({Word_(word: $0)})
     @State private var currentTab: Int = 0
     
     @EnvironmentObject private var store: Store
     var body: some View {
         TabView(selection: $currentTab) {
             ForEach(history.indices, id: \.self) { index in
-                let wordDefinitions = store.simulatedDefenitions()
-                MainView(word: $history[index].word,
-                         definitions: wordDefinitions,
-                         // a bit crutch but it seems no another way
-                         textSizes: Array<CGSize>(repeating: .zero, count: wordDefinitions.count))
-                .tag(index)
-            }
+                // the 'history' shouldn't/couldn't contain non-existed word
+                let word = store.getWord(word: history[index].word)!
+                let _ = print(word)
+                    MainView(word: $history[index].word,
+                             definitions: word.definitions,
+                             // a bit crutch but it seems no another way
+                             textSizes: Array<CGSize>(repeating: .zero, count: word.definitions.count))
+                    .tag(index)
+                }
         }
         .ignoresSafeArea(edges: [.top])
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
         .overlay {
             Button("Add") {
                 history.removeLast(history.count - 1 - currentTab)
-                history.append(Word(word: "sample"))
+                history.append(Word_(word: "sample"))
             }
         }
         .onChange(of: history) { newValue in

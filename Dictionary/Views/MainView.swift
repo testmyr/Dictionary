@@ -13,7 +13,7 @@ enum ViewState {
 
 struct MainView: View {
     @Binding var word: String
-    var definitions: [[String]]
+    var definitions: [Definition]
     @State var viewState: ViewState = .general
     @State var textSizes: [CGSize]
     
@@ -28,7 +28,7 @@ struct MainView: View {
                         ScrollView(showsIndicators: false) {
                             VStack {
                                 ForEach(0..<definitions.indices.count, id: \.self) { index in
-                                    TextWordedView(words: definitions[index], childrenSize: $textSizes[index])
+                                    TextWordedView(words: definitions[index].meaning.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index])
                                         .padding()
                                         .background(.red)
                                         .cornerRadius(20)
@@ -124,7 +124,7 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = Store().definitions_
-        MainView(word: .constant("do1"), definitions: Store().definitions_, textSizes: Array<CGSize>(repeating: .zero, count: temp.count)).environmentObject(Store())
+        let temp = Store().getWord(word: "just")!.definitions
+        MainView(word: .constant("just"), definitions: temp, textSizes: Array<CGSize>(repeating: .zero, count: temp.count)).environmentObject(Store())
     }
 }

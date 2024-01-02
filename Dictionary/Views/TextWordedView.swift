@@ -68,6 +68,6 @@ struct TextWordedView: View {
 
 struct TextViewWorded_Previews: PreviewProvider {
     static var previews: some View {
-        TextWordedView(words: Store().definitions_[0], childrenSize: .constant(.zero))
+        TextWordedView(words: Store().simulatedDefenitions()[0], childrenSize: .constant(.zero))
     }
 }
