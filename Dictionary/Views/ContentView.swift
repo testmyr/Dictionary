@@ -16,14 +16,18 @@ struct ContentView: View {
         TabView(selection: $currentTab) {
             ForEach(history.indices, id: \.self) { index in
                 // the 'history' shouldn't/couldn't contain non-existed word
-                let word = store.getWord(word: history[index].word)!
-                let _ = print(word)
+                if let word = store.getWord(word: history[index].word) {
+                    let _ = print(word)
                     MainView(word: $history[index].word,
                              definitions: word.definitions,
                              // a bit crutch but it seems no another way
                              textSizes: Array<CGSize>(repeating: .zero, count: word.definitions.count))
                     .tag(index)
+                } else {
+                    Text("NO WORD")
+                        .foregroundColor(Color.red)
                 }
+            }
         }
         .ignoresSafeArea(edges: [.top])
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
