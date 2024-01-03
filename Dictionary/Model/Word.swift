@@ -23,14 +23,29 @@ struct Definition {
 struct Word: Decodable {
     let id: String
     let word: String
+    var definitions: [Definition]
     let partofspeech: String
     let relatedwords: String
     let forms: String?
     
-    var definitions: [Definition] {
-        let definitions: [String] = String(decoding: definitions_.bytes, as: UTF8.self).split(separator: "*").map { String($0) }
-        var definitionsWords = [[String]]()
-        return definitions.map { definition in
+    enum CodingKeys: String, CodingKey {
+        case id, word, definitions = "main", partofspeech, relatedwords, forms
+    }
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(String.self, forKey: .id)
+        self.word = try container.decode(String.self, forKey: .word)
+        
+        let datadef = try! container.decode(Data.self, forKey: .definitions)
+        //let definitions_ = SQLite.Blob(data: datadef)
+        //let definitions: [String] = String(decoding: definitions_.bytes, as: UTF8.self).split(separator: "*").map { String($0) }
+        let size = MemoryLayout<UInt8>.stride
+        let length = datadef.count * MemoryLayout<UInt8>.stride
+        var bytes = [UInt8](repeating: 0, count: datadef.count / size)
+        (datadef as NSData).getBytes(&bytes, length: length)
+        let definitions: [String] = String(decoding: bytes, as: UTF8.self).split(separator: "*").map { String($0) }
+        self.definitions = definitions.map { definition in
             var examples: [String] = []
             let parts = definition.split(separator: "^")
             let meaning = String(parts[0])
@@ -38,8 +53,8 @@ struct Word: Decodable {
             var currentUsing: String?
             for part in parts.dropFirst(1) {
                 if part.contains("~") {
-                    currentUsing = part.substring(from: part.firstIndex(of: "~")!)
-                    let example = String(part.substring(to: part.firstIndex(of: "~")!))
+                    currentUsing = String(part[part.firstIndex(of: "~")!...])
+                    let example = String(part[..<part.firstIndex(of: "~")!])
                     subExamples.append((currentUsing!, examples: [example]))
                 } else {
                     if let currentUsing {
@@ -52,20 +67,7 @@ struct Word: Decodable {
             }
             return Definition(meaning: meaning, examples: examples, subExamples: subExamples)
         }
-    }
-    
-    private var definitions_: SQLite.Blob
-    
-    enum CodingKeys: String, CodingKey {
-        case id, word, definitions = "main", partofspeech, relatedwords, forms
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.decode(String.self, forKey: .id)
-        self.word = try container.decode(String.self, forKey: .word)
-        let datadef = try! container.decode(Data.self, forKey: .definitions)
-        definitions_ = SQLite.Blob(data: datadef)
+        
         self.partofspeech = try container.decode(String.self, forKey: .partofspeech)
         self.relatedwords = try container.decode(String.self, forKey: .relatedwords)
         self.forms = try? container.decode(String.self, forKey: .forms)
