@@ -18,10 +18,9 @@ struct ContentView: View {
                 // the 'history' shouldn't/couldn't contain non-existed word
                 if let word = store.getWord(word: history[index].word) {
                     let _ = print(word)
-                    MainView(word: $history[index].word,
-                             definitions: word.definitions,
+                    MainView(word: word, word_: $history[index].word,
                              // a bit crutch but it seems no another way
-                             textSizes: Array<CGSize>(repeating: .zero, count: word.definitions.count))
+                             textSizes: sizes(for: word))
                     .tag(index)
                 } else {
                     Text("NO WORD")
@@ -40,6 +39,14 @@ struct ContentView: View {
         .onChange(of: history) { newValue in
             currentTab = history.count - 1
         }
+    }
+    
+    private func sizes(for word: Word) -> [(CGSize, [CGSize])] {
+        var sizes = Array<(CGSize, [CGSize])>()
+        for d in word.definitions {
+            sizes.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count)))
+        }
+        return sizes
     }
     
     private func correctedIndex(for index: Int) -> Int {

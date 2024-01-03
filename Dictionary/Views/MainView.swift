@@ -12,10 +12,11 @@ enum ViewState {
 }
 
 struct MainView: View {
-    @Binding var word: String
-    var definitions: [Definition]
+    let word: Word
+    @Binding var word_: String
     @State var viewState: ViewState = .general
-    @State var textSizes: [CGSize]
+    
+@State var textSizes: [(CGSize, [CGSize])]
     
     private let dragTrigger: CGFloat = 50
     
@@ -27,12 +28,21 @@ struct MainView: View {
                     ZStack(alignment: .top) {
                         ScrollView(showsIndicators: false) {
                             VStack {
-                                ForEach(0..<definitions.indices.count, id: \.self) { index in
-                                    TextWordedView(words: definitions[index].meaning.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index])
-                                        .padding()
-                                        .background(.red)
-                                        .cornerRadius(20)
-                                        .frame(height: textSizes[index].height + 30)
+                                ForEach(0..<word.definitions.indices.count, id: \.self) { index in
+                                    let definition = word.definitions[index]
+                                    VStack(alignment: .leading) {
+                                        TextWordedView(words: definition.meaning.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].0)
+                                            .frame(height: textSizes[index].0.height + 10)
+                                        
+                                        ForEach(0..<definition.examples.indices.count, id: \.self) { index2 in
+                                            TextWordedView(words: definition.examples[index2].split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].1[index2])
+                                                .frame(height: textSizes[index].1[index2].height)
+                                        }
+                                        .padding(-4)
+                                    }
+                                    .padding()
+                                    .background(.red)
+                                    .cornerRadius(20)
                                 }
                             }
                         }
@@ -90,7 +100,7 @@ struct MainView: View {
                         }
                         .padding()
                         HStack {
-                            TextField("Search English", text: $word)
+                            TextField("Search English", text: $word_)
                                 .textFieldStyle(.roundedBorder)
                             Button {
                                 print("Clicked the speak button")
@@ -124,7 +134,15 @@ struct MainView: View {
 
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
-        let temp = Store().getWord(word: "just")!.definitions
-        MainView(word: .constant("just"), definitions: temp, textSizes: Array<CGSize>(repeating: .zero, count: temp.count)).environmentObject(Store())
+        let word = Store().getWord(word: "just")!
+        MainView(word: word, word_: .constant("just"), textSizes: sizes(for: word)).environmentObject(Store())
+    }
+    
+    private static func sizes(for word: Word) -> [(CGSize, [CGSize])] {
+        var sizes_ = Array<(CGSize, [CGSize])>()
+        for d in word.definitions {
+            sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count)))
+        }
+        return sizes_
     }
 }

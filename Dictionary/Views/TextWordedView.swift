@@ -19,7 +19,8 @@ struct TextWordedView: View {
             ZStack(alignment: .topLeading) {
                 ForEach(0..<self.words.count, id: \.self) { i in
                     Text(self.words[i])
-                        .padding([.horizontal, .vertical], 4)
+                        .padding([.horizontal], 4)
+                        .padding([.vertical], 1)
                         .onTapGesture {
                             print("tapped '\(self.words[i])'")
                         }
