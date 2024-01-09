@@ -20,6 +20,7 @@ struct ContentView: View {
                     let _ = print(word)
                     MainView(word: word, word_: $history[index].word,
                              // a bit crutch but it seems no another way
+                             // because an environment object is injected into _after_ initialization
                              textSizes: sizes(for: word))
                     .tag(index)
                 } else {

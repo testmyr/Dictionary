@@ -30,35 +30,7 @@ struct MainView: View {
                             VStack {
                                 ForEach(0..<word.definitions.indices.count, id: \.self) { index in
                                     let definition = word.definitions[index]
-                                    VStack(alignment: .leading) {
-                                        // the meaning
-                                        TextWordedView(words: definition.meaning.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].0)
-                                            .frame(height: textSizes[index].0.height + 10)
-                                        // its examples
-                                        ForEach(0..<definition.examples.indices.count, id: \.self) { indexExmpl in
-                                            TextWordedView(words: ["• "] +  definition.examples[indexExmpl].split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].1[indexExmpl])
-                                                .frame(height: textSizes[index].1[indexExmpl].height)
-                                        }
-                                        // and subexamples
-                                        let subExamples = definition.subExamples
-                                        ForEach(0..<subExamples.indices.count, id: \.self) { index2 in
-                                            VStack {
-                                                Divider()
-                                                    .frame(height: 1)
-                                                    .overlay(.black.opacity(0.2))
-                                                TextWordedView(words: subExamples[index2].0.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].2[index2].0)
-                                                    .frame(height: textSizes[index].2[index2].0.height)
-                                                    .font(.callout)
-                                                
-                                                let examples = subExamples[index2].examples
-                                                ForEach(0..<examples.indices.count, id: \.self) { index3 in
-                                                    TextWordedView(words: ["  •"] + examples[index3].split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].2[index2].1[index3])
-                                                        .frame(height: textSizes[index].2[index2].1[index3].height)
-                                                }
-                                            }
-                                        }
-                                        .padding([.bottom], 10)
-                                    }
+                                    DefenitionView(textSize: $textSizes[index], definition: definition)
                                     .padding()
                                     .background(.red.opacity(0.5))
                                     .cornerRadius(20)
