@@ -61,7 +61,7 @@ struct Word: Decodable {
                         let index = subExamples.firstIndex(where: {$0.using == currentUsing})!
                         subExamples[index].examples.append(String(part))
                     } else {
-                        examples.append("• " + String(part))
+                        examples.append(String(part))
                     }
                 }
             }

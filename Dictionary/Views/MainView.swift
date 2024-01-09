@@ -16,7 +16,7 @@ struct MainView: View {
     @Binding var word_: String
     @State var viewState: ViewState = .general
     
-@State var textSizes: [(CGSize, [CGSize])]
+    @State var textSizes: [(CGSize, [CGSize], [(CGSize, [CGSize])])]
     
     private let dragTrigger: CGFloat = 50
     
@@ -31,17 +31,36 @@ struct MainView: View {
                                 ForEach(0..<word.definitions.indices.count, id: \.self) { index in
                                     let definition = word.definitions[index]
                                     VStack(alignment: .leading) {
+                                        // the meaning
                                         TextWordedView(words: definition.meaning.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].0)
                                             .frame(height: textSizes[index].0.height + 10)
-                                        
-                                        ForEach(0..<definition.examples.indices.count, id: \.self) { index2 in
-                                            TextWordedView(words: definition.examples[index2].split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].1[index2])
-                                                .frame(height: textSizes[index].1[index2].height)
+                                        // its examples
+                                        ForEach(0..<definition.examples.indices.count, id: \.self) { indexExmpl in
+                                            TextWordedView(words: ["• "] +  definition.examples[indexExmpl].split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].1[indexExmpl])
+                                                .frame(height: textSizes[index].1[indexExmpl].height)
                                         }
-                                        .padding(-4)
+                                        // and subexamples
+                                        let subExamples = definition.subExamples
+                                        ForEach(0..<subExamples.indices.count, id: \.self) { index2 in
+                                            VStack {
+                                                Divider()
+                                                    .frame(height: 1)
+                                                    .overlay(.black.opacity(0.2))
+                                                TextWordedView(words: subExamples[index2].0.split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].2[index2].0)
+                                                    .frame(height: textSizes[index].2[index2].0.height)
+                                                    .font(.callout)
+                                                
+                                                let examples = subExamples[index2].examples
+                                                ForEach(0..<examples.indices.count, id: \.self) { index3 in
+                                                    TextWordedView(words: ["  •"] + examples[index3].split(separator: " ").map({String($0)}), childrenSize: $textSizes[index].2[index2].1[index3])
+                                                        .frame(height: textSizes[index].2[index2].1[index3].height)
+                                                }
+                                            }
+                                        }
+                                        .padding([.bottom], 10)
                                     }
                                     .padding()
-                                    .background(.red)
+                                    .background(.red.opacity(0.5))
                                     .cornerRadius(20)
                                 }
                             }
@@ -58,7 +77,7 @@ struct MainView: View {
                             .frame(width: widthSideView)
                             .opacity(viewState == .right ? 1 : 0)
                     }
-                    .gesture(DragGesture()
+                    .highPriorityGesture(DragGesture()
                         .onEnded({ value in
                             print(value.translation.width)
                             withAnimation {
@@ -138,10 +157,14 @@ struct MainView_Previews: PreviewProvider {
         MainView(word: word, word_: .constant("just"), textSizes: sizes(for: word)).environmentObject(Store())
     }
     
-    private static func sizes(for word: Word) -> [(CGSize, [CGSize])] {
-        var sizes_ = Array<(CGSize, [CGSize])>()
+    private static func sizes(for word: Word) -> [(CGSize, [CGSize], [(CGSize, [CGSize])])] {
+        var sizes_ = Array<(CGSize, [CGSize], [(CGSize, [CGSize])])>()
         for d in word.definitions {
-            sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count)))
+            var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: d.subExamples.count)
+            for subIndex in subExamples.indices {
+                subExamples[subIndex].1 = Array<CGSize>(repeating: .zero, count: d.subExamples[subIndex].1.count)
+            }
+            sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count), subExamples))
         }
         return sizes_
     }

@@ -41,12 +41,16 @@ struct ContentView: View {
         }
     }
     
-    private func sizes(for word: Word) -> [(CGSize, [CGSize])] {
-        var sizes = Array<(CGSize, [CGSize])>()
+    private func sizes(for word: Word) -> [(CGSize, [CGSize], [(CGSize, [CGSize])])] {
+        var sizes_ = Array<(CGSize, [CGSize], [(CGSize, [CGSize])])>()
         for d in word.definitions {
-            sizes.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count)))
+            var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: d.subExamples.count)
+            for subIndex in subExamples.indices {
+                subExamples[subIndex].1 = Array<CGSize>(repeating: .zero, count: d.subExamples[subIndex].1.count)
+            }
+            sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count), subExamples))
         }
-        return sizes
+        return sizes_
     }
     
     private func correctedIndex(for index: Int) -> Int {
