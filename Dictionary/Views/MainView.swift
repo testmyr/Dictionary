@@ -15,7 +15,6 @@ struct MainView: View {
     let word: Word
     @Binding var word_: String
     @State var viewState: ViewState = .general
-    
     @State var textSizes: [(CGSize, [CGSize], [(CGSize, [CGSize])])]
     
     private let dragTrigger: CGFloat = 50
@@ -31,9 +30,6 @@ struct MainView: View {
                                 ForEach(0..<word.definitions.indices.count, id: \.self) { index in
                                     let definition = word.definitions[index]
                                     DefenitionView(textSize: $textSizes[index], definition: definition)
-                                    .padding()
-                                    .background(.red.opacity(0.5))
-                                    .cornerRadius(20)
                                 }
                             }
                         }
@@ -75,7 +71,7 @@ struct MainView: View {
                                 }
                             }
                         }))
-                    VStack {
+                    VStack(alignment: .leading) {
                         HStack {
                             Button("Related words") {
                                 withAnimation {
@@ -89,7 +85,15 @@ struct MainView: View {
                                 }
                             }
                         }
-                        .padding()
+                        .padding([.top, .bottom])
+                        HStack {
+                            Text(word.partofspeech)
+                            Spacer()
+                            if let forms = word.forms {
+                                let formsOfVerb = forms.split(separator: "*").map({String($0)})
+                                Text("(\(formsOfVerb[1]), \(formsOfVerb[2])) \(formsOfVerb[0])")
+                            }
+                        }
                         HStack {
                             TextField("Search English", text: $word_)
                                 .textFieldStyle(.roundedBorder)
@@ -100,11 +104,8 @@ struct MainView: View {
                             }
                             .tint(.black)
                         }
-                        .padding([.top, .bottom])
+                        .padding([.bottom])
                     }
-                    //                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    //                    .contentShape(Rectangle())
-                    //                    .simultaneousGesture(DragGesture())
                     .frame(height: heightBottom)
                     .background(Color.white)
                 }

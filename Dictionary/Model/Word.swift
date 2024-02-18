@@ -8,12 +8,6 @@
 import Foundation
 import SQLite
 
-// TODO rm
-struct Word_: Identifiable, Hashable {
-    let id = UUID()
-    var word: String
-}
-
 struct Definition {
     var meaning: String
     var examples: [String]

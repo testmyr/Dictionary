@@ -9,7 +9,6 @@ import SwiftUI
 
 struct DefenitionView: View {
     @Binding var textSize: (CGSize, [CGSize], [(CGSize, [CGSize])])
-    
     let definition: Definition
     
     var body: some View {
@@ -42,13 +41,16 @@ struct DefenitionView: View {
             }
             .padding([.bottom], 10)
         }
+        .padding()
+        .background(.red.opacity(0.5))
+        .cornerRadius(20)
     }
 }
 
 struct DefenitionView_Previews: PreviewProvider {
     struct DefenitionView_: View {
-        let def = Store().getWord(word: "just")!.definitions[0]
         @State var textSize: (CGSize, [CGSize], [(CGSize, [CGSize])])
+        let def = Store().getWord(word: "just")!.definitions[0]
         var body: some View {
             VStack {
                 DefenitionView(textSize: $textSize, definition: def)

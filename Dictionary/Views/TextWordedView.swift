@@ -9,8 +9,8 @@ import SwiftUI
 
 struct TextWordedView: View {
     var words : [String]
-    
     @Binding var childrenSize: CGSize
+    
     var body : some View {
         var width = CGFloat.zero
         var height = CGFloat.zero
