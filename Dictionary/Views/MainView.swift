@@ -133,9 +133,18 @@ struct MainView: View {
 }
 
 struct MainView_Previews: PreviewProvider {
+    struct MainView_: View {
+        @State var textSize: Sizes
+        let word: Word
+        var body: some View {
+            MainView(word: word, word_: .constant("just"), textSizes: $textSize).environmentObject(Store())
+        }
+    }
+    
+    @State var textSize: Sizes
     static var previews: some View {
         let word = Store().getWord(word: "just")!
-        MainView(word: word, word_: .constant("just"), textSizes: .constant(sizes(for: word))).environmentObject(Store())
+        MainView_(textSize: sizes(for: word), word: word)
     }
     
     private static func sizes(for word: Word) -> Sizes {

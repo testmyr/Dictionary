@@ -59,6 +59,7 @@
 		5ABE95572B3F15A900E9DC56 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				5AD11FCB2B82A4E200E4FF7E /* History.swift */,
 				5AED74B32B3E190500F7AE4B /* Store.swift */,
 				5ABE95552B3F0D6000E9DC56 /* Word.swift */,
 				5ACC72C12B40E569005E3E6E /* Phrase.swift */,
@@ -108,7 +109,6 @@
 			isa = PBXGroup;
 			children = (
 				5AED74A72B3DF3BA00F7AE4B /* ContentView.swift */,
-				5AD11FCB2B82A4E200E4FF7E /* History.swift */,
 				5ABE95512B3EBB0A00E9DC56 /* MainView.swift */,
 				5AC781E62B4DAE1A0013CCF4 /* DefenitionView.swift */,
 				5AC33BCC2B438077004EFC79 /* TextWordedView.swift */,
