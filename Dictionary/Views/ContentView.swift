@@ -8,55 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State var history = ["just", "do", "it"]
+    @ObservedObject private var history = History()
     @State private var currentTab: Int = 0
     
     @EnvironmentObject private var store: Store
     var body: some View {
         TabView(selection: $currentTab) {
-            ForEach(history.indices, id: \.self) { index in
+            ForEach(history.items.indices, id: \.self) { index in
                 // the 'history' shouldn't/couldn't contain non-existed word
-                if let word = store.getWord(word: history[index]) {
-                    let _ = print(word)
-                    MainView(word: word, word_: $history[index],
+                if let word = store.getWord(word: history.items[index]) {
+                    MainView(word: word, word_: history.singularBinding(forIndex: index),
                              // a bit crutch but it seems no another way
                              // because an environment object is injected into _after_ initialization
-                             textSizes: sizes(for: word))
+                             textSizes: history.singularBinding(forIndex: index))
                     .tag(index)
                 } else {
-                    Text("NO WORD")
-                        .foregroundColor(Color.red)
+//                    Text("NO WORD")
+//                        .foregroundColor(Color.red)
                 }
             }
         }
         .ignoresSafeArea(edges: [.top])
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-        .overlay {
-            Button("Add") {
-                history.removeLast(history.count - 1 - currentTab)
-                history.append("yourself")
-            }
+//        .overlay {
+//            Button("Add") {
+//                history.items.removeLast(history.items.count - 1 - currentTab)
+//                history.items.append("yourself")
+//            }
+//        }
+        .onChange(of: history.currentTab) { newValue in
+            currentTab = newValue
         }
-        .onChange(of: history) { newValue in
-            currentTab = history.count - 1
+        .onChange(of: currentTab) { newValue in
+            history.currentTab = newValue
         }
-    }
-    
-    private func sizes(for word: Word) -> [(CGSize, [CGSize], [(CGSize, [CGSize])])] {
-        var sizes_ = Array<(CGSize, [CGSize], [(CGSize, [CGSize])])>()
-        for d in word.definitions {
-            var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: d.subExamples.count)
-            for subIndex in subExamples.indices {
-                subExamples[subIndex].1 = Array<CGSize>(repeating: .zero, count: d.subExamples[subIndex].1.count)
-            }
-            sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count), subExamples))
-        }
-        return sizes_
-    }
-    
-    private func correctedIndex(for index: Int) -> Int {
-        let count = history.count
-        return (count + index) % count
     }
 }
 

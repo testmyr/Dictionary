@@ -14,8 +14,9 @@ enum ViewState {
 struct MainView: View {
     let word: Word
     @Binding var word_: String
+    @State private var wordTextField: String = ""
     @State var viewState: ViewState = .general
-    @State var textSizes: [(CGSize, [CGSize], [(CGSize, [CGSize])])]
+    @Binding var textSizes: Sizes
     
     private let dragTrigger: CGFloat = 50
     
@@ -95,8 +96,12 @@ struct MainView: View {
                             }
                         }
                         HStack {
-                            TextField("Search English", text: $word_)
+                            TextField("Search English", text: $wordTextField)
+                                .onSubmit({
+                                    word_ = wordTextField
+                                })
                                 .textFieldStyle(.roundedBorder)
+                                .autocapitalization(.none)
                             Button {
                                 print("Clicked the speak button")
                             } label: {
@@ -118,6 +123,9 @@ struct MainView: View {
                 .padding([.leading, .trailing], 5)
             }
         }
+        .onAppear() {
+            wordTextField = word_
+        }
         .onDisappear() {
             viewState = .general
         }
@@ -127,11 +135,11 @@ struct MainView: View {
 struct MainView_Previews: PreviewProvider {
     static var previews: some View {
         let word = Store().getWord(word: "just")!
-        MainView(word: word, word_: .constant("just"), textSizes: sizes(for: word)).environmentObject(Store())
+        MainView(word: word, word_: .constant("just"), textSizes: .constant(sizes(for: word))).environmentObject(Store())
     }
     
-    private static func sizes(for word: Word) -> [(CGSize, [CGSize], [(CGSize, [CGSize])])] {
-        var sizes_ = Array<(CGSize, [CGSize], [(CGSize, [CGSize])])>()
+    private static func sizes(for word: Word) -> Sizes {
+        var sizes_ = Array<DefinitionSizes>()
         for d in word.definitions {
             var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: d.subExamples.count)
             for subIndex in subExamples.indices {

@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct DefenitionView: View {
-    @Binding var textSize: (CGSize, [CGSize], [(CGSize, [CGSize])])
+    @Binding var textSize: DefinitionSizes
     let definition: Definition
     
     var body: some View {
@@ -49,7 +49,7 @@ struct DefenitionView: View {
 
 struct DefenitionView_Previews: PreviewProvider {
     struct DefenitionView_: View {
-        @State var textSize: (CGSize, [CGSize], [(CGSize, [CGSize])])
+        @State var textSize: DefinitionSizes
         let def = Store().getWord(word: "just")!.definitions[0]
         var body: some View {
             VStack {
@@ -64,7 +64,7 @@ struct DefenitionView_Previews: PreviewProvider {
         DefenitionView_(textSize: sizes(for: def))
     }
 
-    private static func sizes(for def: Definition) -> (CGSize, [CGSize], [(CGSize, [CGSize])]) {
+    private static func sizes(for def: Definition) -> DefinitionSizes {
         var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: def.subExamples.count)
         let _ = print(subExamples.count)
         for subIndex in subExamples.indices {
