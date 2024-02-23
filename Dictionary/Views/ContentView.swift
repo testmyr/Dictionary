@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject private var history = History()
+    @ObservedObject private var history = HistoryManager()
     @State private var currentTab: Int = 0
     
     @EnvironmentObject private var store: Store

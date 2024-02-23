@@ -66,7 +66,6 @@ struct DefenitionView_Previews: PreviewProvider {
 
     private static func sizes(for def: Definition) -> DefinitionSizes {
         var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: def.subExamples.count)
-        let _ = print(subExamples.count)
         for subIndex in subExamples.indices {
             subExamples[subIndex].1 = Array<CGSize>(repeating: .zero, count: def.subExamples[subIndex].1.count)
         }

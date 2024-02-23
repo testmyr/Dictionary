@@ -19,7 +19,7 @@ struct Word: Decodable {
     let word: String
     var definitions: [Definition]
     let partofspeech: String
-    let relatedwords: String
+    let relatedWordsIds: [String]?
     let forms: String?
     
     enum CodingKeys: String, CodingKey {
@@ -63,7 +63,8 @@ struct Word: Decodable {
         }
         
         self.partofspeech = try container.decode(String.self, forKey: .partofspeech)
-        self.relatedwords = try container.decode(String.self, forKey: .relatedwords)
-        self.forms = try? container.decode(String.self, forKey: .forms)
+        self.relatedWordsIds = try? container.decode(String.self, forKey: .relatedwords).split(separator: "*").map { String($0) }
+        let forms = try? container.decode(String.self, forKey: .forms)
+        self.forms = forms?.replacingOccurrences(of: "*", with: " ")
     }
 }

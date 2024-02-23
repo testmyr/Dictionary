@@ -24,16 +24,14 @@ class Store: ObservableObject {
     private let phrase = Expression<String>("phrase")
     
     init() {
-        let path = Bundle.main.path(forResource: "Dict_trial", ofType: "sqlite3")!
+        let path = Bundle.main.path(forResource: "Dict_demo", ofType: "sqlite3")!
         db = try? Connection(path, readonly: true)
         
         if let user = try? db?.pluck(users) {
         }
+        let temp2 = getPhrases(for: "just")
         let temp = getWord(word: "just")
-        let r = temp!.definitions
-        print(r)
-        let temp2 = getPhrase(for: "just")
-    }
+        let r = temp!.definitions    }
     
     func getWord(word: String) -> Word? {
         let query = users.select(id, wordExpression, partofspeech, definitions, relatedwords, forms)
@@ -46,19 +44,23 @@ class Store: ObservableObject {
             return nil
         }
     }
-    func getWord(byID id: String) {
-    }
-    
-    func getPhrase(for wordID: String) -> Phrase? {
-        let queryPhrases = phrases.select(id, phrase, definitions)
-            .filter(self.id == wordID)
+    func getWord(byID id: String) -> Word? {
+        let query = users.select(self.id, wordExpression, partofspeech, definitions, relatedwords, forms)
+            .filter(self.id == id)
             .limit(1)
-        if let element = try? db?.prepareRowIterator(queryPhrases).next() {
+        if let element = try? db?.prepareRowIterator(query).next() {
             let decoder = element.decoder()
-            return try? Phrase(from: decoder)
+            return try? Word(from: decoder)
         } else {
             return nil
         }
+    }
+    
+    func getPhrases(for wordID: String) -> [Phrase]? {
+        let queryPhrases = phrases.select(id, phrase, definitions)
+            .filter(self.id == wordID)
+        let mapRowIterator = try? db?.prepareRowIterator(queryPhrases)
+        return try? mapRowIterator?.compactMap{ try? Phrase(from: $0.decoder()) }
     }
     
     func simulatedDefenitions() -> [[String]] {

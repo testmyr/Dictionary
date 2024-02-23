@@ -14,10 +14,13 @@ enum ViewState {
 struct MainView: View {
     let word: Word
     @Binding var word_: String
-    @State private var wordTextField: String = ""
     @State var viewState: ViewState = .general
     @Binding var textSizes: Sizes
     
+    @State private var wordTextField: String = ""
+    @EnvironmentObject private var store: Store
+    @State private var relatedWords: [Word]?
+    @State private var relatedPhrases: [Phrase]?
     private let dragTrigger: CGFloat = 50
     
     var body: some View {
@@ -37,11 +40,11 @@ struct MainView: View {
                         .padding([.top], geometry.safeAreaInsets.top)
                         
                         let widthSideView = geometry.size.width * 0.62
-                        RelatedWordsView()
+                        RelatedWordsView(relatedWords: relatedWords)
                             .offset(x: viewState == .left ? -(geometry.size.width - widthSideView) * 0.5 : -widthSideView - (geometry.size.width - widthSideView) * 0.5 )
                             .frame(width: widthSideView)
                             .opacity(viewState == .left ? 1 : 0)
-                        RelatedPhrasesView()
+                        RelatedPhrasesView(relatedPhrases: relatedPhrases)
                             .offset(x: viewState == .right ? (geometry.size.width - widthSideView) * 0.5 : widthSideView + (geometry.size.width - widthSideView) * 0.5)
                             .frame(width: widthSideView)
                             .opacity(viewState == .right ? 1 : 0)
@@ -91,8 +94,7 @@ struct MainView: View {
                             Text(word.partofspeech)
                             Spacer()
                             if let forms = word.forms {
-                                let formsOfVerb = forms.split(separator: "*").map({String($0)})
-                                Text("(\(formsOfVerb[1]), \(formsOfVerb[2])) \(formsOfVerb[0])")
+                                Text(forms)
                             }
                         }
                         HStack {
@@ -125,6 +127,12 @@ struct MainView: View {
         }
         .onAppear() {
             wordTextField = word_
+            // it might be looking inefficient BUT
+            // every swiping causes MainView's init calling TWICE every time
+            // don't be lazy, check it: add 'init', compare with 'onAppear'
+            relatedWords = word.relatedWordsIds?.compactMap({store.getWord(byID: $0)})
+            relatedPhrases = store.getPhrases(for: word.id)
+
         }
         .onDisappear() {
             viewState = .general

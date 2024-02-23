@@ -8,15 +8,27 @@
 import SwiftUI
 
 struct RelatedPhrasesView: View {
+    private(set) var relatedPhrases: [Phrase]?
+
     var body: some View {
         GeometryReader { geometry in
             VStack() {
                 Spacer()
-                HStack {
+                if let relatedPhrases, relatedPhrases.count > 0 {
+                    List(relatedPhrases, id: \.phrase) { phrase in
+                        Text("\(phrase.phrase)")
+                        .onTapGesture {
+                            print("tapped phrase '\(phrase.phrase)'")
+                        }
+                    }
+                    .padding([.top], 5)
+                } else {
+                    HStack {
+                        Spacer()
+                        Text("No related phrases.")
+                    }
                     Spacer()
-                    Text("Hello, RelatedPhrases!")
                 }
-                Spacer()
             }
         }
         .background(Color.blue)

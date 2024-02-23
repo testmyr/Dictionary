@@ -9,7 +9,7 @@ import SwiftUI
 
 typealias DefinitionSizes = (CGSize, [CGSize], [(CGSize, [CGSize])])
 typealias Sizes = [DefinitionSizes]
-class History: ObservableObject {
+class HistoryManager: ObservableObject {
     @Published var currentTab: Int = 0
     @Published private(set) var items = ["just", "do", "it", "yourself"]
     @Published private var itemsSizes: [Sizes] = []
