@@ -13,16 +13,25 @@ struct RelatedPhrasesView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack() {
-                Spacer()
                 if let relatedPhrases, relatedPhrases.count > 0 {
                     List(relatedPhrases, id: \.phrase) { phrase in
-                        Text("\(phrase.phrase)")
-                        .onTapGesture {
-                            print("tapped phrase '\(phrase.phrase)'")
+                        HStack {
+                            Spacer()
+                            Text("\(phrase.phrase)")
+                                .rotationEffect(.degrees(180))
+                                .onTapGesture {
+                                    print("tapped phrase '\(phrase.phrase)'")
+                                }
+                        }
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in
+                            0
                         }
                     }
-                    .padding([.top], 5)
+                    .scrollIndicators(.hidden)
+                    .padding([.bottom], 20)
+                    .rotationEffect(.degrees(180))
                 } else {
+                    Spacer()
                     HStack {
                         Spacer()
                         Text("No related phrases.")

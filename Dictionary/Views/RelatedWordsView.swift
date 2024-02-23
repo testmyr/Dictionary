@@ -12,16 +12,25 @@ struct RelatedWordsView: View {
     var body: some View {
         GeometryReader { geometry in
             VStack() {
-                Spacer()
                 if let relatedWords, relatedWords.count > 0 {
                     List(relatedWords, id: \.id) { word in
-                        Text("\(word.word)")
-                        .onTapGesture {
-                            print("tapped '\(word.word)'")
+                        HStack {
+                            Spacer()
+                            Text("\(word.word)")
+                                .rotationEffect(.degrees(180))
+                                .onTapGesture {
+                                    print("tapped '\(word.word)'")
+                            }
+                        }
+                        .alignmentGuide(.listRowSeparatorLeading) { _ in
+                            0
                         }
                     }
-                    .padding([.top], 5)
+                    .scrollIndicators(.hidden)
+                    .padding([.bottom], 20)
+                    .rotationEffect(.degrees(180))
                 } else {
+                    Spacer()
                     Text("No related words.")
                     Spacer()
                 }

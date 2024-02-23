@@ -128,7 +128,7 @@ struct MainView: View {
         .onAppear() {
             wordTextField = word_
             // it might be looking inefficient BUT
-            // every swiping causes MainView's init calling TWICE every time
+            // every swiping at the ContentView causes _every_ MainView's 'init' calling TWICE
             // don't be lazy, check it: add 'init', compare with 'onAppear'
             relatedWords = word.relatedWordsIds?.compactMap({store.getWord(byID: $0)})
             relatedPhrases = store.getPhrases(for: word.id)
