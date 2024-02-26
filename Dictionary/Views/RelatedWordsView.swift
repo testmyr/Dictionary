@@ -8,40 +8,47 @@
 import SwiftUI
 
 struct RelatedWordsView: View {
+    @Binding var releatedWordId: String
     private(set) var relatedWords: [Word]?
+    
+    private let colorBg = Color.white
     var body: some View {
-        GeometryReader { geometry in
-            VStack() {
-                if let relatedWords, relatedWords.count > 0 {
-                    List(relatedWords, id: \.id) { word in
-                        HStack {
-                            Spacer()
-                            Text("\(word.word)")
-                                .rotationEffect(.degrees(180))
-                                .onTapGesture {
-                                    print("tapped '\(word.word)'")
-                            }
-                        }
-                        .alignmentGuide(.listRowSeparatorLeading) { _ in
-                            0
-                        }
+        VStack() {
+            if let relatedWords, relatedWords.count > 0 {
+                List(relatedWords, id: \.id) { word in
+                    HStack {
+                        Spacer()
+                        Text("\(word.word)")
+                            .rotationEffect(.degrees(180))
                     }
-                    .scrollIndicators(.hidden)
-                    .padding([.bottom], 20)
-                    .rotationEffect(.degrees(180))
-                } else {
-                    Spacer()
+                    .background(colorBg)
+                    .onTapGesture {
+                        releatedWordId = word.id
+                        print("tapped '\(word.word)'")
+                    }
+                    .alignmentGuide(.listRowSeparatorLeading) { _ in
+                        0
+                    }
+                }
+                .listStyle(.plain)
+                .scrollContentBackground(.hidden)
+                .scrollIndicators(.hidden)
+                .rotationEffect(.degrees(180))
+            } else {
+                Spacer()
+                HStack {
                     Text("No related words.")
                     Spacer()
                 }
+                Spacer()
             }
         }
-        .background(Color.green)
+        .background(colorBg)
     }
 }
 
 struct RelatedWords_Previews: PreviewProvider {
     static var previews: some View {
-        RelatedWordsView(relatedWords: [])
+        RelatedWordsView(releatedWordId: .constant("do"), relatedWords: [Store().getWord(word: "just")!, Store().getWord(word: "do")!])
     }
 }

@@ -14,6 +14,7 @@ enum ViewState {
 struct MainView: View {
     let word: Word
     @Binding var word_: String
+    @Binding var wordId: String
     @State var viewState: ViewState = .general
     @Binding var textSizes: Sizes
     
@@ -40,14 +41,16 @@ struct MainView: View {
                         .padding([.top], geometry.safeAreaInsets.top)
                         
                         let widthSideView = geometry.size.width * 0.62
-                        RelatedWordsView(relatedWords: relatedWords)
+                        RelatedWordsView(releatedWordId: $wordId, relatedWords: relatedWords)
                             .offset(x: viewState == .left ? -(geometry.size.width - widthSideView) * 0.5 : -widthSideView - (geometry.size.width - widthSideView) * 0.5 )
                             .frame(width: widthSideView)
                             .opacity(viewState == .left ? 1 : 0)
+                            .padding([.top], geometry.safeAreaInsets.top)
                         RelatedPhrasesView(relatedPhrases: relatedPhrases)
                             .offset(x: viewState == .right ? (geometry.size.width - widthSideView) * 0.5 : widthSideView + (geometry.size.width - widthSideView) * 0.5)
                             .frame(width: widthSideView)
                             .opacity(viewState == .right ? 1 : 0)
+                            .padding([.top], geometry.safeAreaInsets.top)
                     }
                     .highPriorityGesture(DragGesture()
                         .onEnded({ value in
@@ -145,7 +148,7 @@ struct MainView_Previews: PreviewProvider {
         @State var textSize: Sizes
         let word: Word
         var body: some View {
-            MainView(word: word, word_: .constant("just"), textSizes: $textSize).environmentObject(Store())
+            MainView(word: word, word_: .constant("just"), wordId: .constant("just"), textSizes: $textSize).environmentObject(Store())
         }
     }
     

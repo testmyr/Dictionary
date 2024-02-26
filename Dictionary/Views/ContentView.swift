@@ -8,19 +8,19 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject private var history = HistoryManager()
+    @ObservedObject private var history = HistoryManager()// mb an envr object later
     @State private var currentTab: Int = 0
     
     @EnvironmentObject private var store: Store
     var body: some View {
         TabView(selection: $currentTab) {
-            ForEach(history.items.indices, id: \.self) { index in
+            ForEach(history.wordsIds.indices, id: \.self) { index in
                 // the 'history' shouldn't/couldn't contain non-existed word
-                if let word = store.getWord(word: history.items[index]) {
-                    MainView(word: word, word_: history.singularBinding(forIndex: index),
+                if let word = store.getWord(byID: history.wordsIds[index]) {
+                    MainView(word: word, word_: history.bindingToWord(forIndex: index), wordId: history.bindingToWordId(forIndex: index),
                              // a bit crutch but it seems no another way
                              // because an environment object is injected into _after_ initialization
-                             textSizes: history.singularBinding(forIndex: index))
+                             textSizes: history.bindingToSizes(forIndex: index))
                     .tag(index)
                 } else {
 //                    Text("NO WORD")
@@ -30,12 +30,6 @@ struct ContentView: View {
         }
         .ignoresSafeArea(edges: [.top])
         .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
-//        .overlay {
-//            Button("Add") {
-//                history.items.removeLast(history.items.count - 1 - currentTab)
-//                history.items.append("yourself")
-//            }
-//        }
         .onChange(of: history.currentTab) { newValue in
             currentTab = newValue
         }
