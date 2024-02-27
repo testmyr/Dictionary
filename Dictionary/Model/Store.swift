@@ -26,12 +26,7 @@ class Store: ObservableObject {
     init() {
         let path = Bundle.main.path(forResource: "Dict_demo", ofType: "sqlite3")!
         db = try? Connection(path, readonly: true)
-        
-        if let user = try? db?.pluck(users) {
-        }
-        let temp2 = getPhrases(for: "just")
-        let temp = getWord(word: "just")
-        let r = temp!.definitions    }
+    }
     
     func getWord(word: String) -> Word? {
         let query = users.select(id, wordExpression, partofspeech, definitions, relatedwords, forms)

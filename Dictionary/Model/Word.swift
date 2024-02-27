@@ -14,13 +14,15 @@ struct Definition {
     var subExamples: [(using: String, examples: [String])]
 }
 
-struct Word: Decodable {
+struct Word: Decodable, Definitionable {
     let id: String
     let word: String
     var definitions: [Definition]
     let partofspeech: String
     let relatedWordsIds: [String]?
-    let forms: String?
+    var forms: String?
+    
+    var text: String { word }
     
     enum CodingKeys: String, CodingKey {
         case id, word, definitions = "main", partofspeech, relatedwords, forms
@@ -64,7 +66,12 @@ struct Word: Decodable {
         
         self.partofspeech = try container.decode(String.self, forKey: .partofspeech)
         self.relatedWordsIds = try? container.decode(String.self, forKey: .relatedwords).split(separator: "*").map { String($0) }
-        let forms = try? container.decode(String.self, forKey: .forms)
-        self.forms = forms?.replacingOccurrences(of: "*", with: " ")
+        
+        forms = try? container.decode(String.self, forKey: .forms)
+        if partofspeech == "verb", let forms = forms?.components(separatedBy: "*"), forms.count == 4 {
+            self.forms = "(\(forms[2]), \(forms[3])) \(forms[1])"
+        } else {
+            self.forms = forms?.replacingOccurrences(of: "*", with: " ")
+        }
     }
 }

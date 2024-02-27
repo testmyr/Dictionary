@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RelatedWordsView: View {
-    @Binding var releatedWordId: String
+    @Binding var releatedWordSelected: Word
     private(set) var relatedWords: [Word]?
     
     private let colorBg = Color.white
@@ -23,7 +23,7 @@ struct RelatedWordsView: View {
                     }
                     .background(colorBg)
                     .onTapGesture {
-                        releatedWordId = word.id
+                        releatedWordSelected = word
                         print("tapped '\(word.word)'")
                     }
                     .alignmentGuide(.listRowSeparatorLeading) { _ in
@@ -49,6 +49,6 @@ struct RelatedWordsView: View {
 
 struct RelatedWords_Previews: PreviewProvider {
     static var previews: some View {
-        RelatedWordsView(releatedWordId: .constant("do"), relatedWords: [Store().getWord(word: "just")!, Store().getWord(word: "do")!])
+        RelatedWordsView(releatedWordSelected: .constant(Store().getWord(word: "do")!), relatedWords: [Store().getWord(word: "just")!, Store().getWord(word: "do")!])
     }
 }

@@ -9,23 +9,13 @@ import SwiftUI
 
 struct ContentView: View {
     @ObservedObject private var history = HistoryManager()// mb an envr object later
-    @State private var currentTab: Int = 0
+    @State private var currentTab: Int = 0    
     
     @EnvironmentObject private var store: Store
     var body: some View {
         TabView(selection: $currentTab) {
-            ForEach(history.wordsIds.indices, id: \.self) { index in
-                // the 'history' shouldn't/couldn't contain non-existed word
-                if let word = store.getWord(byID: history.wordsIds[index]) {
-                    MainView(word: word, word_: history.bindingToWord(forIndex: index), wordId: history.bindingToWordId(forIndex: index),
-                             // a bit crutch but it seems no another way
-                             // because an environment object is injected into _after_ initialization
-                             textSizes: history.bindingToSizes(forIndex: index))
-                    .tag(index)
-                } else {
-//                    Text("NO WORD")
-//                        .foregroundColor(Color.red)
-                }
+            ForEach(history.items.indices, id: \.self) { index in
+                pagedView(index: index)
             }
         }
         .ignoresSafeArea(edges: [.top])
@@ -36,6 +26,22 @@ struct ContentView: View {
         .onChange(of: currentTab) { newValue in
             history.currentTab = newValue
         }
+    }
+    
+    @ViewBuilder private func pagedView(index: Int) -> some View {
+        // the 'history' shouldn't/couldn't contain non-existed item
+        if let word = history.items[index] as? Word {
+            WordView(word: word, word_: history.bindingToWord(forIndex: index), relatedWord: history.bindingToWordId(forIndex: index), phraseSelected: history.bindingToPhrase(forIndex: index),
+                     // a bit crutch but it seems no another way
+                     // because an environment object is injected into _after_ initialization
+                     textSizes: history.bindingToSizes(forIndex: index))
+            .tag(index)
+        } else if let phrase = history.items[index] as? Phrase {
+            PhraseView(phrase: phrase, word_: history.bindingToWord(forIndex: index), textSizes: history.bindingToSizes(forIndex: index))
+        }/*  else {
+//                    Text("NO WORD")
+//                        .foregroundColor(Color.red)
+        }*/
     }
 }
 

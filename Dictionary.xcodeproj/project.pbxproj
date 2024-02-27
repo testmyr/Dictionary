@@ -7,13 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A19DF552B8E090D0081961E /* Definitionable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A19DF542B8E090D0081961E /* Definitionable.swift */; };
+		5A19DF592B8E0E760081961E /* Dict_demo.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 5A19DF582B8E0E760081961E /* Dict_demo.sqlite3 */; };
+		5A19DF5D2B8E2DED0081961E /* PhraseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A19DF5C2B8E2DED0081961E /* PhraseView.swift */; };
 		5A5649F72B8680DD0084746C /* HistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5649F62B8680DD0084746C /* HistoryManager.swift */; };
-		5ABE95522B3EBB0A00E9DC56 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABE95512B3EBB0A00E9DC56 /* MainView.swift */; };
+		5ABE95522B3EBB0A00E9DC56 /* WordView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABE95512B3EBB0A00E9DC56 /* WordView.swift */; };
 		5ABE95562B3F0D6000E9DC56 /* Word.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ABE95552B3F0D6000E9DC56 /* Word.swift */; };
 		5ABE955A2B3F601B00E9DC56 /* SQLite in Frameworks */ = {isa = PBXBuildFile; productRef = 5ABE95592B3F601B00E9DC56 /* SQLite */; };
 		5AC33BCD2B438077004EFC79 /* TextWordedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC33BCC2B438077004EFC79 /* TextWordedView.swift */; };
 		5AC781E72B4DAE1A0013CCF4 /* DefenitionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC781E62B4DAE1A0013CCF4 /* DefenitionView.swift */; };
-		5ACC72BE2B40E333005E3E6E /* Dict_demo.sqlite3 in Resources */ = {isa = PBXBuildFile; fileRef = 5ACC72BD2B40E333005E3E6E /* Dict_demo.sqlite3 */; };
 		5ACC72C22B40E569005E3E6E /* Phrase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACC72C12B40E569005E3E6E /* Phrase.swift */; };
 		5ACC72C42B40E714005E3E6E /* Swift.Blob+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACC72C32B40E714005E3E6E /* Swift.Blob+Extension.swift */; };
 		5AED74A62B3DF3BA00F7AE4B /* DictionaryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AED74A52B3DF3BA00F7AE4B /* DictionaryApp.swift */; };
@@ -26,12 +28,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		5A19DF542B8E090D0081961E /* Definitionable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Definitionable.swift; sourceTree = "<group>"; };
+		5A19DF582B8E0E760081961E /* Dict_demo.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dict_demo.sqlite3; sourceTree = "<group>"; };
+		5A19DF5C2B8E2DED0081961E /* PhraseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhraseView.swift; sourceTree = "<group>"; };
 		5A5649F62B8680DD0084746C /* HistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryManager.swift; sourceTree = "<group>"; };
-		5ABE95512B3EBB0A00E9DC56 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		5ABE95512B3EBB0A00E9DC56 /* WordView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordView.swift; sourceTree = "<group>"; };
 		5ABE95552B3F0D6000E9DC56 /* Word.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Word.swift; sourceTree = "<group>"; };
 		5AC33BCC2B438077004EFC79 /* TextWordedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextWordedView.swift; sourceTree = "<group>"; };
 		5AC781E62B4DAE1A0013CCF4 /* DefenitionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefenitionView.swift; sourceTree = "<group>"; };
-		5ACC72BD2B40E333005E3E6E /* Dict_demo.sqlite3 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Dict_demo.sqlite3; sourceTree = "<group>"; };
 		5ACC72C12B40E569005E3E6E /* Phrase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phrase.swift; sourceTree = "<group>"; };
 		5ACC72C32B40E714005E3E6E /* Swift.Blob+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Swift.Blob+Extension.swift"; sourceTree = "<group>"; };
 		5AED74A22B3DF3BA00F7AE4B /* Dictionary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Dictionary.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -60,6 +64,7 @@
 			isa = PBXGroup;
 			children = (
 				5A5649F62B8680DD0084746C /* HistoryManager.swift */,
+				5A19DF542B8E090D0081961E /* Definitionable.swift */,
 				5AED74B32B3E190500F7AE4B /* Store.swift */,
 				5ABE95552B3F0D6000E9DC56 /* Word.swift */,
 				5ACC72C12B40E569005E3E6E /* Phrase.swift */,
@@ -87,7 +92,7 @@
 		5AED74A42B3DF3BA00F7AE4B /* Dictionary */ = {
 			isa = PBXGroup;
 			children = (
-				5ACC72BD2B40E333005E3E6E /* Dict_demo.sqlite3 */,
+				5A19DF582B8E0E760081961E /* Dict_demo.sqlite3 */,
 				5AED74A52B3DF3BA00F7AE4B /* DictionaryApp.swift */,
 				5AED74B92B3E356300F7AE4B /* Views */,
 				5ABE95572B3F15A900E9DC56 /* Model */,
@@ -109,7 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				5AED74A72B3DF3BA00F7AE4B /* ContentView.swift */,
-				5ABE95512B3EBB0A00E9DC56 /* MainView.swift */,
+				5A19DF5C2B8E2DED0081961E /* PhraseView.swift */,
+				5ABE95512B3EBB0A00E9DC56 /* WordView.swift */,
 				5AC781E62B4DAE1A0013CCF4 /* DefenitionView.swift */,
 				5AC33BCC2B438077004EFC79 /* TextWordedView.swift */,
 				5AED74B52B3E210300F7AE4B /* RelatedWordsView.swift */,
@@ -182,7 +188,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5ACC72BE2B40E333005E3E6E /* Dict_demo.sqlite3 in Resources */,
+				5A19DF592B8E0E760081961E /* Dict_demo.sqlite3 in Resources */,
 				5AED74AD2B3DF3BC00F7AE4B /* Preview Assets.xcassets in Resources */,
 				5AED74AA2B3DF3BC00F7AE4B /* Assets.xcassets in Resources */,
 			);
@@ -202,7 +208,9 @@
 				5ABE95562B3F0D6000E9DC56 /* Word.swift in Sources */,
 				5ACC72C22B40E569005E3E6E /* Phrase.swift in Sources */,
 				5A5649F72B8680DD0084746C /* HistoryManager.swift in Sources */,
-				5ABE95522B3EBB0A00E9DC56 /* MainView.swift in Sources */,
+				5A19DF5D2B8E2DED0081961E /* PhraseView.swift in Sources */,
+				5A19DF552B8E090D0081961E /* Definitionable.swift in Sources */,
+				5ABE95522B3EBB0A00E9DC56 /* WordView.swift in Sources */,
 				5AED74B82B3E210E00F7AE4B /* RelatedPhrasesView.swift in Sources */,
 				5AED74B62B3E210300F7AE4B /* RelatedWordsView.swift in Sources */,
 				5AED74A82B3DF3BA00F7AE4B /* ContentView.swift in Sources */,

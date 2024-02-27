@@ -10,6 +10,8 @@ import SwiftUI
 struct TextWordedView: View {
     var words : [String]
     @Binding var childrenSize: CGSize
+    @Binding var tappedWord: String
+    
     
     var body : some View {
         var width = CGFloat.zero
@@ -22,6 +24,7 @@ struct TextWordedView: View {
                         .padding([.horizontal], 4)
                         .padding([.vertical], 1)
                         .onTapGesture {
+                            self.tappedWord = self.words[i].replacingOccurrences(of: ",", with: "").replacingOccurrences(of: ".", with: "").replacingOccurrences(of: "?", with: "").replacingOccurrences(of: "!", with: "")
                             print("tapped '\(self.words[i])'")
                         }
                         .alignmentGuide(.leading, computeValue: { context in
@@ -69,6 +72,6 @@ struct TextWordedView: View {
 
 struct TextViewWorded_Previews: PreviewProvider {
     static var previews: some View {
-        TextWordedView(words: Store().simulatedDefenitions()[0], childrenSize: .constant(.zero))
+        TextWordedView(words: Store().simulatedDefenitions()[0], childrenSize: .constant(.zero), tappedWord: .constant(""))
     }
 }

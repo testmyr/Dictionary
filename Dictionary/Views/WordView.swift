@@ -1,5 +1,5 @@
 //
-//  MainView.swift
+//  WordView.swift
 //  Dictionary
 //
 //  Created by sdk on 29.12.2023.
@@ -11,15 +11,16 @@ enum ViewState {
     case left, general, right
 }
 
-struct MainView: View {
+struct WordView: View {
     let word: Word
     @Binding var word_: String
-    @Binding var wordId: String
+    @Binding var relatedWord: Word
+    @Binding var phraseSelected: Phrase?
     @State var viewState: ViewState = .general
     @Binding var textSizes: Sizes
     
-    @State private var wordTextField: String = ""
     @EnvironmentObject private var store: Store
+    @State private var wordTextField: String = ""
     @State private var relatedWords: [Word]?
     @State private var relatedPhrases: [Phrase]?
     private let dragTrigger: CGFloat = 50
@@ -34,19 +35,19 @@ struct MainView: View {
                             VStack {
                                 ForEach(0..<word.definitions.indices.count, id: \.self) { index in
                                     let definition = word.definitions[index]
-                                    DefenitionView(textSize: $textSizes[index], definition: definition)
+                                    DefenitionView(textSize: $textSizes[index], definition: definition, tappedWord: $word_)
                                 }
                             }
                         }
                         .padding([.top], geometry.safeAreaInsets.top)
                         
                         let widthSideView = geometry.size.width * 0.62
-                        RelatedWordsView(releatedWordId: $wordId, relatedWords: relatedWords)
+                        RelatedWordsView(releatedWordSelected: $relatedWord, relatedWords: relatedWords)
                             .offset(x: viewState == .left ? -(geometry.size.width - widthSideView) * 0.5 : -widthSideView - (geometry.size.width - widthSideView) * 0.5 )
                             .frame(width: widthSideView)
                             .opacity(viewState == .left ? 1 : 0)
                             .padding([.top], geometry.safeAreaInsets.top)
-                        RelatedPhrasesView(relatedPhrases: relatedPhrases)
+                        RelatedPhrasesView(phraseSelected: $phraseSelected, relatedPhrases: relatedPhrases)
                             .offset(x: viewState == .right ? (geometry.size.width - widthSideView) * 0.5 : widthSideView + (geometry.size.width - widthSideView) * 0.5)
                             .frame(width: widthSideView)
                             .opacity(viewState == .right ? 1 : 0)
@@ -54,7 +55,6 @@ struct MainView: View {
                     }
                     .highPriorityGesture(DragGesture()
                         .onEnded({ value in
-                            print(value.translation.width)
                             withAnimation {
                                 let translation = value.translation.width
                                 if translation > dragTrigger {
@@ -100,9 +100,12 @@ struct MainView: View {
                                 Text(forms)
                             }
                         }
+                        .font(.system(size: 14))
                         HStack {
                             TextField("Search English", text: $wordTextField)
                                 .onSubmit({
+                                    // remove trailing spaces from the entered text
+                                    wordTextField = wordTextField.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
                                     word_ = wordTextField
                                 })
                                 .textFieldStyle(.roundedBorder)
@@ -131,7 +134,7 @@ struct MainView: View {
         .onAppear() {
             wordTextField = word_
             // it might be looking inefficient BUT
-            // every swiping at the ContentView causes _every_ MainView's 'init' calling TWICE
+            // every swiping at the ContentView causes _every_ WordView's 'init' calling TWICE
             // don't be lazy, check it: add 'init', compare with 'onAppear'
             relatedWords = word.relatedWordsIds?.compactMap({store.getWord(byID: $0)})
             relatedPhrases = store.getPhrases(for: word.id)
@@ -143,30 +146,18 @@ struct MainView: View {
     }
 }
 
-struct MainView_Previews: PreviewProvider {
-    struct MainView_: View {
+struct WordView_Previews: PreviewProvider {
+    struct WordView_: View {
         @State var textSize: Sizes
         let word: Word
         var body: some View {
-            MainView(word: word, word_: .constant("just"), wordId: .constant("just"), textSizes: $textSize).environmentObject(Store())
+            WordView(word: word, word_: .constant("just"), relatedWord: .constant(Store().getWord(word: "just")!), phraseSelected: .constant(Store().getPhrases(for: "just")!.first!), textSizes: $textSize).environmentObject(Store())
         }
     }
     
     @State var textSize: Sizes
     static var previews: some View {
         let word = Store().getWord(word: "just")!
-        MainView_(textSize: sizes(for: word), word: word)
-    }
-    
-    private static func sizes(for word: Word) -> Sizes {
-        var sizes_ = Array<DefinitionSizes>()
-        for d in word.definitions {
-            var subExamples = Array<(CGSize, [CGSize])>(repeating: (.zero, []), count: d.subExamples.count)
-            for subIndex in subExamples.indices {
-                subExamples[subIndex].1 = Array<CGSize>(repeating: .zero, count: d.subExamples[subIndex].1.count)
-            }
-            sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count), subExamples))
-        }
-        return sizes_
+        WordView_(textSize: HistoryManager.sizes(for: word), word: word)
     }
 }

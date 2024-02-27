@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct RelatedPhrasesView: View {
+    @Binding var phraseSelected: Phrase?
     private(set) var relatedPhrases: [Phrase]?
     
     private let colorBg = Color.white
@@ -22,6 +23,7 @@ struct RelatedPhrasesView: View {
                     }
                     .background(colorBg)
                     .onTapGesture {
+                        phraseSelected = phrase
                         print("tapped '\(phrase.phrase)'")
                     }
                     .alignmentGuide(.listRowSeparatorLeading) { _ in
@@ -47,6 +49,6 @@ struct RelatedPhrasesView: View {
 
 struct RelatedPhrases_Previews: PreviewProvider {
     static var previews: some View {
-        RelatedPhrasesView()
+        RelatedPhrasesView(phraseSelected: .constant(Store().getPhrases(for: "just")!.first!))
     }
 }
