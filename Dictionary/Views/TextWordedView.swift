@@ -24,7 +24,11 @@ struct TextWordedView: View {
                         .padding([.horizontal], 4)
                         .padding([.vertical], 1)
                         .onTapGesture {
-                            self.tappedWord = self.words[i].replacingOccurrences(of: ",", with: "").replacingOccurrences(of: ".", with: "").replacingOccurrences(of: "?", with: "").replacingOccurrences(of: "!", with: "")
+                            self.tappedWord = self.words[i]
+                                .replacingOccurrences(of: ",", with: "")
+                                .replacingOccurrences(of: ".", with: "")
+                                .replacingOccurrences(of: "?", with: "")
+                                .replacingOccurrences(of: "!", with: "")
                             print("tapped '\(self.words[i])'")
                         }
                         .alignmentGuide(.leading, computeValue: { context in

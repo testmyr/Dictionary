@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    @ObservedObject private var history = HistoryManager()// mb an envr object later
+    @ObservedObject private var history = HistoryManager()
     @State private var currentTab: Int = 0    
     
     @EnvironmentObject private var store: Store
@@ -31,13 +31,9 @@ struct ContentView: View {
     @ViewBuilder private func pagedView(index: Int) -> some View {
         // the 'history' shouldn't/couldn't contain non-existed item
         if let word = history.items[index] as? Word {
-            WordView(word: word, word_: history.bindingToWord(forIndex: index), relatedWord: history.bindingToWordId(forIndex: index), phraseSelected: history.bindingToPhrase(forIndex: index),
-                     // a bit crutch but it seems no another way
-                     // because an environment object is injected into _after_ initialization
-                     textSizes: history.bindingToSizes(forIndex: index))
-            .tag(index)
+            WordView(word: word, index: index, history: history)
         } else if let phrase = history.items[index] as? Phrase {
-            PhraseView(phrase: phrase, word_: history.bindingToWord(forIndex: index), textSizes: history.bindingToSizes(forIndex: index))
+            PhraseView(phrase: phrase, index: index, history: history)
         }/*  else {
 //                    Text("NO WORD")
 //                        .foregroundColor(Color.red)

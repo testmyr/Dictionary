@@ -12,6 +12,12 @@ struct PhraseView: View {
     @Binding var word_: String// clicked at a definition
     @Binding var textSizes: Sizes
     
+    init(phrase: Phrase, index: Int, history: HistoryManager) {
+        self.phrase = phrase
+        _word_ = history.bindingToWord(forIndex: index)
+        _textSizes = history.bindingToSizes(forIndex: index)
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
@@ -65,14 +71,20 @@ struct PhraseView_Previews: PreviewProvider {
         @State var textSize: Sizes
         let phrase: Phrase
         var body: some View {
-            PhraseView(phrase: phrase, word_: .constant("just"), textSizes: $textSize).environmentObject(Store())
+            PhraseView(phrase: phrase, index: 0, history: HistoryManager(), textSizes: $textSize).environmentObject(Store())
         }
     }
-    
+
     @State var textSize: Sizes
     static var previews: some View {
         let phrase = Store().getPhrases(for: "just")!.first!
         PhraseView_(textSize: HistoryManager.sizes(for: phrase), phrase: phrase)
+    }
+}
+fileprivate extension PhraseView {
+    init(phrase: Phrase, index: Int, history: HistoryManager, textSizes: Binding<Sizes>) {
+        self.init(phrase: phrase, index: index, history: history)
+        self._textSizes = textSizes
     }
 }
 

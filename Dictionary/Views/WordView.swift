@@ -12,18 +12,31 @@ enum ViewState {
 }
 
 struct WordView: View {
-    let word: Word
-    @Binding var word_: String
-    @Binding var relatedWord: Word
-    @Binding var phraseSelected: Phrase?
-    @State var viewState: ViewState = .general
-    @Binding var textSizes: Sizes
+    private let index: Int
+    private let word: Word
     
     @EnvironmentObject private var store: Store
+    
+    @State private var viewState: ViewState = .general
     @State private var wordTextField: String = ""
     @State private var relatedWords: [Word]?
     @State private var relatedPhrases: [Phrase]?
+    
+    @Binding private var word_: String
+    @Binding private var relatedWordSelected: Word
+    @Binding private var phraseSelected: Phrase?
+    @Binding private var textSizes: Sizes
+    
     private let dragTrigger: CGFloat = 50
+    
+    init(word: Word, index: Int, history: HistoryManager) {
+        self.index = index
+        self.word = word
+        _word_ = history.bindingToWord(forIndex: index)
+        _relatedWordSelected = history.bindingToWordId(forIndex: index)
+        _phraseSelected = history.bindingToPhrase(forIndex: index)
+        _textSizes = history.bindingToSizes(forIndex: index)
+    }
     
     var body: some View {
         GeometryReader { geometry in
@@ -42,7 +55,7 @@ struct WordView: View {
                         .padding([.top], geometry.safeAreaInsets.top)
                         
                         let widthSideView = geometry.size.width * 0.62
-                        RelatedWordsView(releatedWordSelected: $relatedWord, relatedWords: relatedWords)
+                        RelatedWordsView(releatedWordSelected: $relatedWordSelected, relatedWords: relatedWords)
                             .offset(x: viewState == .left ? -(geometry.size.width - widthSideView) * 0.5 : -widthSideView - (geometry.size.width - widthSideView) * 0.5 )
                             .frame(width: widthSideView)
                             .opacity(viewState == .left ? 1 : 0)
@@ -151,7 +164,7 @@ struct WordView_Previews: PreviewProvider {
         @State var textSize: Sizes
         let word: Word
         var body: some View {
-            WordView(word: word, word_: .constant("just"), relatedWord: .constant(Store().getWord(word: "just")!), phraseSelected: .constant(Store().getPhrases(for: "just")!.first!), textSizes: $textSize).environmentObject(Store())
+            WordView(word: word, index: 1, history: HistoryManager(), textSizes: $textSize).environmentObject(Store())
         }
     }
     
@@ -159,5 +172,11 @@ struct WordView_Previews: PreviewProvider {
     static var previews: some View {
         let word = Store().getWord(word: "just")!
         WordView_(textSize: HistoryManager.sizes(for: word), word: word)
+    }
+}
+fileprivate extension WordView {
+    init(word: Word, index: Int, history: HistoryManager, textSizes: Binding<Sizes>) {
+        self.init(word: word, index: index, history: history)
+        self._textSizes = textSizes
     }
 }

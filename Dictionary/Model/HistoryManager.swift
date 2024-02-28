@@ -26,7 +26,8 @@ class HistoryManager: ObservableObject {
             guard index < self.items.count else {
                 // exceeds by one in case of *
                 // because it's affected by the page(going to be removed) that follows the replaced one
-                // in other words the replacing happens first(in spite of assigning order), that's why
+                // in other words:
+                // the current view replacing precedes(in spite of assigning order) the cleaning of the next views in TabView, that's why
                 return ""
             }
             return self.items[index].text
