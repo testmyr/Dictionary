@@ -22,6 +22,9 @@ struct WordView: View {
     @State private var relatedWords: [Word]?
     @State private var relatedPhrases: [Phrase]?
     
+    @State private var isRelatedWordsDisabled = false
+    @State private var isRelatedPhrasesDisabled = false
+    
     @Binding private var word_: String
     @Binding private var relatedWordSelected: Word
     @Binding private var phraseSelected: Phrase?
@@ -75,7 +78,9 @@ struct WordView: View {
                                     case .left:
                                         break
                                     case .general:
-                                        viewState = .left
+                                        if !isRelatedWordsDisabled {
+                                            viewState = .left
+                                        }
                                     case .right:
                                         viewState = .general
                                     }
@@ -84,7 +89,9 @@ struct WordView: View {
                                     case .left:
                                         viewState = .general
                                     case .general:
-                                        viewState = .right
+                                        if !isRelatedPhrasesDisabled {
+                                            viewState = .right
+                                        }
                                     case .right:
                                         break
                                     }
@@ -98,12 +105,14 @@ struct WordView: View {
                                     viewState = .left
                                 }
                             }
+                            .disabled(isRelatedWordsDisabled)
                             Spacer()
                             Button("Related phrases") {
                                 withAnimation {
                                     viewState = .right
                                 }
                             }
+                            .disabled(isRelatedPhrasesDisabled)
                         }
                         .padding([.top, .bottom])
                         HStack {
@@ -152,6 +161,8 @@ struct WordView: View {
             relatedWords = word.relatedWordsIds?.compactMap({store.getWord(byID: $0)})
             relatedPhrases = store.getPhrases(for: word.id)
 
+            isRelatedWordsDisabled = (relatedWords?.count ?? 0) == 0
+            isRelatedPhrasesDisabled = (relatedPhrases?.count ?? 0) == 0
         }
         .onDisappear() {
             viewState = .general
