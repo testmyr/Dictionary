@@ -9,7 +9,8 @@ import SwiftUI
 
 struct PhraseView: View {
     let phrase: Phrase
-    @Binding var word_: String// clicked at a definition
+    
+    @Binding var word_: String
     @Binding var textSizes: Sizes
     
     init(phrase: Phrase, index: Int, history: HistoryManager) {
@@ -21,14 +22,13 @@ struct PhraseView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
-                let heightBottom: CGFloat = 150
                 VStack {
                     ZStack(alignment: .top) {
                         ScrollView(showsIndicators: false) {
                             VStack {
                                 ForEach(0..<phrase.definitions.indices.count, id: \.self) { index in
                                     let definition = phrase.definitions[index]
-                                    DefenitionView(textSize: $textSizes[index], definition: definition, tappedWord: $word_)
+                                    DefenitionView(definition: definition, textSize: $textSizes[index], tappedWord: $word_)
                                         .rotationEffect(.degrees(180))
                                 }
                             }

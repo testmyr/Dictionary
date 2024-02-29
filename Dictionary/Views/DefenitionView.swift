@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct DefenitionView: View {
-    @Binding var textSize: DefinitionSizes
     let definition: Definition
+    
+    @Binding var textSize: DefinitionSizes
     @Binding var tappedWord: String
     
     var body: some View {
@@ -55,7 +56,7 @@ struct DefenitionView_Previews: PreviewProvider {
         let def = Store().getWord(word: "just")!.definitions[0]
         var body: some View {
             VStack {
-                DefenitionView(textSize: $textSize, definition: def, tappedWord: $tappedWord)
+                DefenitionView(definition: def, textSize: $textSize, tappedWord: $tappedWord)
                 Spacer()
             }
         }

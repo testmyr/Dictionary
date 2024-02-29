@@ -9,6 +9,7 @@ import SwiftUI
 
 struct TextWordedView: View {
     var words : [String]
+    
     @Binding var childrenSize: CGSize
     @Binding var tappedWord: String
     

@@ -17,6 +17,11 @@ struct WordView: View {
     
     @EnvironmentObject private var store: Store
     
+    @Binding private var word_: String
+    @Binding private var relatedWordSelected: Word
+    @Binding private var phraseSelected: Phrase?
+    @Binding private var textSizes: Sizes
+    
     @State private var viewState: ViewState = .general
     @State private var wordTextField: String = ""
     @State private var relatedWords: [Word]?
@@ -24,11 +29,6 @@ struct WordView: View {
     
     @State private var isRelatedWordsDisabled = false
     @State private var isRelatedPhrasesDisabled = false
-    
-    @Binding private var word_: String
-    @Binding private var relatedWordSelected: Word
-    @Binding private var phraseSelected: Phrase?
-    @Binding private var textSizes: Sizes
     
     private let dragTrigger: CGFloat = 50
     
@@ -44,14 +44,13 @@ struct WordView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack(alignment: .topLeading) {
-                let heightBottom: CGFloat = 150
                 VStack {
                     ZStack(alignment: .top) {
                         ScrollView(showsIndicators: false) {
                             VStack {
                                 ForEach(0..<word.definitions.indices.count, id: \.self) { index in
                                     let definition = word.definitions[index]
-                                    DefenitionView(textSize: $textSizes[index], definition: definition, tappedWord: $word_)
+                                    DefenitionView(definition: definition, textSize: $textSizes[index], tappedWord: $word_)
                                 }
                             }
                         }

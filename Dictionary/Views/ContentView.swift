@@ -7,6 +7,8 @@
 
 import SwiftUI
 
+let heightBottom: CGFloat = 150
+
 struct ContentView: View {
     @ObservedObject private var history = HistoryManager()
     @State private var currentTab: Int = 0    
