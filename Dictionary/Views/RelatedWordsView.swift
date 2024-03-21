@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RelatedWordsView: View {
-    @Binding var releatedWordSelected: Word
+    @Binding var releatedWordSelected: Word?
     private(set) var relatedWords: [Word]?
     
     private let colorBg = Color.white

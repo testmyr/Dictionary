@@ -43,12 +43,7 @@ class HistoryManager: ObservableObject {
                     guard newValue != self.items[index + 1].text else {// **
                         return
                     }
-                    if index + 2 <= self.items.count - 1 {
-                        self.items.remove(atOffsets: IndexSet((index + 2)...(self.items.count - 1)))
-                    }
-                    if index + 2 <= self.itemsSizes.count - 1 {
-                        self.itemsSizes.remove(atOffsets: IndexSet((index + 2)...(self.itemsSizes.count - 1)))
-                    }
+                    self.removeExcessive(startingWith: index)
                     self.items[index + 1] = wordDef
                     self.itemsSizes[index + 1] = Self.sizes(for: wordDef)
                 }
@@ -57,40 +52,52 @@ class HistoryManager: ObservableObject {
                 if let wordDef = Store().getWord(word: newValue) {
                     self.currentTab = index + 1
                     self.items.append(wordDef)
-                    self.itemsSizes.append(Self.sizes(for: wordDef))
+                    if self.itemsSizes.count == self.items.count {
+                        self.itemsSizes.append(Self.sizes(for: wordDef))
+                    } else {
+                        self.itemsSizes[index + 1] = Self.sizes(for: wordDef)
+                    }
                 }
             }
         }
     }
     
     // used only in case a related word is clicked
-    func bindingToWordId(forIndex index: Int) -> Binding<Word> {
-        Binding<Word> { () -> Word in
-            self.items[index] as! Word
-        } set: { (newValue) in
-            // this equality hardly ever could happen but let it be
-            guard newValue.id != (self.items[index] as! Word).id else {
-                return
+    func bindingToWordId(forIndex index: Int) -> Binding<Word?> {
+        Binding<Word?> { () -> Word? in
+            guard index < self.items.count else {
+                // exceeds by one in case of *
+                // because it's affected by the page(going to be removed) that follows the replaced one
+                // in other words:
+                // the current view replacing precedes(in spite of assigning order) the cleaning of the next views in TabView, that's why
+                return nil
             }
-            // there are at least two in the history, the current isn't the latest
-            if index < self.items.count - 1 {
-                self.currentTab = index + 1
-                guard newValue.id != (self.items[index + 1] as? Word)?.id else {
+            return self.items[index] as? Word
+        } set: { (newValue) in
+            if let newValue = newValue {
+                // this equality hardly ever could happen but let it be
+                guard newValue.id != (self.items[index] as! Word).id else {
                     return
                 }
-                self.items[index + 1] = newValue
-                if index + 2 <= self.items.count - 1 {
-                    self.items.remove(atOffsets: IndexSet((index + 2)...(self.items.count - 1)))
+                // there are at least two in the history, the current isn't the latest
+                if index < self.items.count - 1 {
+                    self.currentTab = index + 1
+                    guard newValue.id != (self.items[index + 1] as? Word)?.id else {
+                        return
+                    }
+                    self.removeExcessive(startingWith: index)
+                    self.items[index + 1] = newValue
+                    self.itemsSizes[index + 1] = Self.sizes(for: newValue)
+                    // the current is the latest
+                } else {
+                    self.currentTab = index + 1
+                    self.items.append(newValue)
+                    if self.itemsSizes.count == self.items.count {
+                        self.itemsSizes.append(Self.sizes(for: newValue))
+                    } else {
+                        self.itemsSizes[index + 1] = Self.sizes(for: newValue)
+                    }
                 }
-                self.itemsSizes[index + 1] = Self.sizes(for: newValue)
-                if index + 2 <= self.itemsSizes.count - 1 {
-                    self.itemsSizes.remove(atOffsets: IndexSet((index + 2)...(self.itemsSizes.count - 1)))
-                }
-                // the current is the latest
-            } else {
-                self.currentTab = index + 1
-                self.items.append(newValue)
-                self.itemsSizes.append(Self.sizes(for: newValue))
             }
         }
     }
@@ -98,7 +105,14 @@ class HistoryManager: ObservableObject {
     // used only in case a related phrase is clicked
     func bindingToPhrase(forIndex index: Int) -> Binding<Phrase?> {
         Binding<Phrase?> { () -> Phrase? in
-            self.items[index] as? Phrase
+            guard index < self.items.count else {
+                // exceeds by one in case of *
+                // because it's affected by the page(going to be removed) that follows the replaced one
+                // in other words:
+                // the current view replacing precedes(in spite of assigning order) the cleaning of the next views in TabView, that's why
+                return nil
+            }
+            return self.items[index] as? Phrase
         } set: { (newValue) in
             if let newValue = newValue {
                 // there are at least two in the history, the current isn't the latest
@@ -107,19 +121,18 @@ class HistoryManager: ObservableObject {
                     guard newValue != (self.items[index + 1] as? Phrase) else {
                         return
                     }
+                    self.removeExcessive(startingWith: index)
                     self.items[index + 1] = newValue
-                    if index + 2 <= self.items.count - 1 {
-                        self.items.remove(atOffsets: IndexSet((index + 2)...(self.items.count - 1)))
-                    }
                     self.itemsSizes[index + 1] = Self.sizes(for: newValue)
-                    if index + 2 <= self.itemsSizes.count - 1 {
-                        self.itemsSizes.remove(atOffsets: IndexSet((index + 2)...(self.itemsSizes.count - 1)))
-                    }
                     // the current is the latest
                 } else {
                     self.currentTab = index + 1
                     self.items.append(newValue)
-                    self.itemsSizes.append(Self.sizes(for: newValue))
+                    if self.itemsSizes.count == self.items.count {
+                        self.itemsSizes.append(Self.sizes(for: newValue))
+                    } else {
+                        self.itemsSizes[index + 1] = Self.sizes(for: newValue)
+                    }
                 }
             }
         }
@@ -153,5 +166,14 @@ class HistoryManager: ObservableObject {
             sizes_.append((.zero, Array<CGSize>(repeating: .zero, count: d.examples.count), subExamples))
         }
         return sizes_
+    }
+    
+    private func removeExcessive(startingWith index: Int) {
+        if index + 2 <= self.items.count - 1 {
+            self.items.remove(atOffsets: IndexSet((index + 2)...(self.items.count - 1)))
+        }
+        if index + 3 <= self.itemsSizes.count - 1 {
+            self.itemsSizes.remove(atOffsets: IndexSet((index + 3)...(self.itemsSizes.count - 1)))
+        }
     }
 }

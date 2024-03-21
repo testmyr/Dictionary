@@ -18,7 +18,7 @@ struct WordView: View {
     @EnvironmentObject private var store: Store
     
     @Binding private var word_: String
-    @Binding private var relatedWordSelected: Word
+    @Binding private var relatedWordSelected: Word?
     @Binding private var phraseSelected: Phrase?
     @Binding private var textSizes: Sizes
     
