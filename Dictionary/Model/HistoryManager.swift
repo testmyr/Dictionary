@@ -51,12 +51,12 @@ class HistoryManager: ObservableObject {
             } else {
                 if let wordDef = Store().getWord(word: newValue) {
                     self.currentTab = index + 1
-                    self.items.append(wordDef)
                     if self.itemsSizes.count == self.items.count {
                         self.itemsSizes.append(Self.sizes(for: wordDef))
                     } else {
                         self.itemsSizes[index + 1] = Self.sizes(for: wordDef)
                     }
+                    self.items.append(wordDef)
                 }
             }
         }
@@ -91,12 +91,12 @@ class HistoryManager: ObservableObject {
                     // the current is the latest
                 } else {
                     self.currentTab = index + 1
-                    self.items.append(newValue)
                     if self.itemsSizes.count == self.items.count {
                         self.itemsSizes.append(Self.sizes(for: newValue))
                     } else {
                         self.itemsSizes[index + 1] = Self.sizes(for: newValue)
                     }
+                    self.items.append(newValue)
                 }
             }
         }
@@ -127,12 +127,12 @@ class HistoryManager: ObservableObject {
                     // the current is the latest
                 } else {
                     self.currentTab = index + 1
-                    self.items.append(newValue)
                     if self.itemsSizes.count == self.items.count {
                         self.itemsSizes.append(Self.sizes(for: newValue))
                     } else {
                         self.itemsSizes[index + 1] = Self.sizes(for: newValue)
                     }
+                    self.items.append(newValue)
                 }
             }
         }
